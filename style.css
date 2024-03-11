@@ -1,0 +1,212 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.period-selector {
+    display: flex;
+    align-items: center;
+}
+
+.period-selector label {
+    margin-right: 10px;
+}
+
+#period {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+.total-expenses {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.total-expenses h2 {
+    margin: 0;
+}
+
+#total-amount {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.categories {
+    margin-bottom: 20px;
+}
+
+.categories h2 {
+    margin: 0;
+}
+
+.categories ul {
+    list-style: none;
+    padding: 0;
+}
+
+.categories li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.category-name {
+    font-weight: bold;
+}
+
+.category-amount {
+    font-style: italic;
+}
+
+.add-transaction {
+    text-align: center;
+}
+
+#add-transaction-button {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+    transition: 0.2s;
+}
+
+#add-transaction-button:hover {
+    background-color: #ddd;
+}
+
+/* CSS с второй страницы */
+
+#back-button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+    transition: 0.2s;
+}
+
+#back-button:hover {
+    background-color: #ddd;
+}
+
+.category-expenses {
+    margin-bottom: 20px;
+}
+
+.category-expenses h2 {
+    margin: 0;
+}
+
+.category-expenses ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category-expenses li {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.date {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.transactions {
+    list-style: none;
+    padding: 0;
+}
+
+.transactions li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.transaction-name {
+    font-weight: bold;
+}
+
+.transaction-amount {
+    font-style: italic;
+}
+
+.total-amount {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+}
+
+/* CSS с третьей страницы */
+
+.add-transaction-form {
+    margin-bottom: 20px;
+}
+
+.add-transaction-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-transaction-form label {
+    margin-bottom: 5px;
+}
+
+.add-transaction-form input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.add-transaction-form select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.add-transaction-form button {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+    transition: 0.2s;
+    margin-top: 10px;
+}
+
+.add-transaction-form button:hover {
+    background-color: #ddd;
+}

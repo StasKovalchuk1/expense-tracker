@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ведение трат</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Ведение трат</h1>
+    <div class="period-selector">
+        <label for="period">Период:</label>
+        <select id="period" name="period">
+            <option value="week">Неделя</option>
+            <option value="month">Месяц</option>
+            <option value="quarter">Квартал</option>
+            <option value="year">Год</option>
+        </select>
+    </div>
+</header>
+<main>
+    <section class="total-expenses">
+        <h2>Общий расход:</h2>
+        <span id="total-amount">100 Kč</span>
+    </section>
+    <section class="categories">
+        <h2>Категории:</h2>
+        <ul class="categories-list"></ul>
+    </section>
+    <section class="add-transaction">
+        <button id="add-transaction-button-homepage">
+            <span class="material-icons">add</span>
+        </button>
+    </section>
+</main>
+<script src="app.js" type="module" defer></script>
+</body>
+</html>
