@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-    <h1>[Название категории]</h1>
+    <h1 class="category-name-h1">[Название категории]</h1>
     <button id="back-button">
         <span class="material-icons">arrow_back</span>
         Назад
@@ -16,32 +16,32 @@
 </header>
 <main>
     <section class="category-expenses">
-        <h2>Затраты:</h2>
+        <h2 class="category-expenses-h2">Затраты:</h2>
         <ul class="transactions-list">
-            <li>
-                <div class="date">06.03.2024</div>
-                <ul class="transactions">
-                    <li>
-                        <span class="transaction-name">Продукты</span>
-                        <span class="transaction-amount">250 Kč</span>
-                    </li>
-                    <li>
-                        <span class="transaction-name">Транспорт</span>
-                        <span class="transaction-amount">100 Kč</span>
-                    </li>
-                </ul>
-                <div class="total-amount">350 Kč</div>
-            </li>
-            <li>
-                <div class="date">05.03.2024</div>
-                <ul class="transactions">
-                    <li>
-                        <span class="transaction-name">Развлечения</span>
-                        <span class="transaction-amount">150 Kč</span>
-                    </li>
-                </ul>
-                <div class="total-amount">150 Kč</div>
-            </li>
+<!--            <li>-->
+<!--                <div class="date">06.03.2024</div>-->
+<!--                <ul class="transactions">-->
+<!--                    <li>-->
+<!--                        <span class="transaction-name">Продукты</span>-->
+<!--                        <span class="transaction-amount">250 Kč</span>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <span class="transaction-name">Транспорт</span>-->
+<!--                        <span class="transaction-amount">100 Kč</span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--                <div class="total-amount">350 Kč</div>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--                <div class="date">05.03.2024</div>-->
+<!--                <ul class="transactions">-->
+<!--                    <li>-->
+<!--                        <span class="transaction-name">Развлечения</span>-->
+<!--                        <span class="transaction-amount">150 Kč</span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--                <div class="total-amount">150 Kč</div>-->
+<!--            </li>-->
         </ul>
     </section>
     <section class="add-transaction">
@@ -51,6 +51,6 @@
         </button>
     </section>
 </main>
-<script src="app.js"></script>
+<script src="transactions.js" type="module"></script>
 </body>
 </html>

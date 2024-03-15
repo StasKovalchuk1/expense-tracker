@@ -78,6 +78,10 @@ main {
     font-weight: bold;
 }
 
+.category-name:hover {
+    cursor: pointer;
+}
+
 .category-amount {
     font-style: italic;
 }
@@ -130,7 +134,7 @@ main {
 }
 
 .category-expenses li {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
@@ -163,8 +167,8 @@ main {
 
 .total-amount {
     font-weight: bold;
-    text-align: right;
-    margin-top: 10px;
+    text-align: left;
+    margin-bottom: 10px;
 }
 
 /* CSS с третьей страницы */

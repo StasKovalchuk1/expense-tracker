@@ -28,6 +28,20 @@ export class Category {
         return filteredTransactions.reduce((sum, transaction) => sum + parseFloat(transaction.amount), 0);
     }
 
+    /**
+     * Возвращает массив транзакций.
+     * @param {string} filter - Период.
+     * @returns {Array<Transaction>} - Массив объектов класса Transaction.
+     */
+    getTransactionsForPeriod(filter){
+        let filteredTransactions= [];
+        if (filter === 'week') filteredTransactions = this.getTransactionsForLastWeek();
+        else if (filter === 'month') filteredTransactions = this.getTransactionsForLastMonth();
+        else if (filter === 'quarter') filteredTransactions = this.getTransactionsForLastQuarter();
+        else if (filter === 'year') filteredTransactions = this.getTransactionsForLastYear();
+        return filteredTransactions;
+    }
+
     getName() {
         return this.name;
     }
@@ -104,7 +118,7 @@ let initialCategories = [
     new Category("Party", [])
 ];
 
-let chosenCategory = null;
+// export let categorySelected = null;
 
 
 const addTransactionButton = document.querySelector('#add-transaction-button-homepage');
@@ -114,7 +128,7 @@ if (addTransactionButton) {
     })
 }
 
-const periodSelect = document.getElementById('period');
+export const periodSelect = document.getElementById('period');
 const totalAmountSpan = document.getElementById('total-amount');
 
 // Функция для проверки и записи дефолтных категорий
@@ -171,18 +185,43 @@ function setTotalAmount(categories, targetEl, period) {
     targetEl.textContent = total;
 }
 
-// handler for changing period
-if (periodSelect) periodSelect.addEventListener('change', (event) => {
-    if (categoriesListEl) createHTMLCategoriesWithStrings(categories, categoriesListEl);
-    if (totalAmountSpan) setTotalAmount(categories, totalAmountSpan, periodSelect.value);
-})
-
 // print total expenses
-if (totalAmountSpan) setTotalAmount(categories, totalAmountSpan, periodSelect.value);
 
+if (totalAmountSpan) setTotalAmount(categories, totalAmountSpan, periodSelect.value);
 // print initial categories
+
 if (categoriesListEl) createHTMLCategoriesWithStrings(categories, categoriesListEl);
 
+let categoryNameEls = document.querySelectorAll('.category-name');
+
+// handler for changing period
+if (periodSelect) {
+    periodSelect.addEventListener('change', (event) => {
+        if (categoriesListEl) createHTMLCategoriesWithStrings(categories, categoriesListEl);
+        if (totalAmountSpan) setTotalAmount(categories, totalAmountSpan, periodSelect.value);
+        // Обновите обработчики событий для элементов категории
+        console.log('updated page');
+        console.log(categoryNameEls);
+        categoryNameEls = document.querySelectorAll('.category-name');
+        for (const categoryNameEl of categoryNameEls) {
+            console.log(' trying to add listeners ')
+            categoryNameEl.removeEventListener('click', handleCategoryClick);
+            categoryNameEl.addEventListener('click', handleCategoryClick);
+        }
+    });
+}
+
+function handleCategoryClick(e) {
+    e.preventDefault();
+    const categorySelected = e.target.textContent;
+    console.log(categorySelected);
+    window.location.href = `category.html?category=${categorySelected}&period=${periodSelect.value}`;
+}
+
+// Добавьте обработчики событий для элементов категории
+for (const categoryNameEl of categoryNameEls) {
+    categoryNameEl.addEventListener('click', handleCategoryClick);
+}
 
 
 
