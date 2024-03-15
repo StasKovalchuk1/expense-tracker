@@ -110,6 +110,7 @@ export class Transaction {
     }
 }
 
+/*
 let initialCategories = [
     new Category("Transport", []),
     new Category("House", []),
@@ -222,6 +223,125 @@ function handleCategoryClick(e) {
 for (const categoryNameEl of categoryNameEls) {
     categoryNameEl.addEventListener('click', handleCategoryClick);
 }
+*/
+
+class Homepage {
+    constructor() {
+        this._addTransactionButton = document.querySelector('#add-transaction-button-homepage');
+        if (this._addTransactionButton) {
+            this._addTransactionButton.addEventListener('click', (e) => {
+                window.location.href = "addTransaction.html";
+            })
+        }
+
+        this._initialCategories = [
+            new Category("Transport", []),
+            new Category("House", []),
+            new Category("Food", []),
+            new Category("Hobby", []),
+            new Category("Party", [])
+        ];
+
+        this._periodSelect = document.getElementById('period');
+        this._totalAmountSpan = document.getElementById('total-amount');
+
+        this._categories = this._getCategoriesFromLocalStorage();
+        console.log(this._categories);
+
+        this._categoriesListEl = document.querySelector('.categories-list');
+
+        if (this._categories && this._totalAmountSpan && this._periodSelect.value && this._categoriesListEl) {
+            this._setTotalAmount(this._categories, this._totalAmountSpan, this._periodSelect.value);
+            this._createHTMLCategoriesWithStrings(this._categories, this._categoriesListEl);
+        }
+
+        this._categoryNameEls = document.querySelectorAll('.category-name');
+
+        if (this._periodSelect) this._periodSelect.addEventListener('change', this._handlePeriodChange.bind(this));
+        this._setHandlersToCategoryClick();
+    }
+
+    get myCategories() {
+        return this._categories;
+    }
+
+    _getCategoriesFromLocalStorage() {
+        const storedCategories = localStorage.getItem('categories');
+
+        if (!storedCategories) {
+            const serializedCategories = JSON.stringify({
+                type: 'Categories',
+                data: this._initialCategories.map(category => ({
+                    name: category.name,
+                    transactions: category.transactions,
+                })),
+            });
+            localStorage.setItem('categories', serializedCategories);
+            return this._initialCategories;
+        }
+        return JSON.parse(storedCategories).data.map(categoryData => new Category(categoryData.name, categoryData.transactions));
+    }
+
+    _createHTMLCategoriesWithStrings(categories, targetEl) {
+        targetEl.innerHTML = '';
+
+        const selectedPeriod = this._periodSelect.value;
+        console.log(selectedPeriod)
+
+        let categoriesHtmlArray = categories.map( (category) =>{
+            const html = `
+                    <li>
+                        <span class="category-name">${ category.getName() }</span>
+                        <span class="category-amount">${ category.getTotalForPeriod(selectedPeriod) }</span>
+                    </li>
+                `;
+
+            return html;
+        })
+        let categoriesHtml = categoriesHtmlArray.join('');
+        targetEl.innerHTML = categoriesHtml;
+
+    }
+
+    _setTotalAmount(categories, targetEl, period) {
+        let total = categories.reduce((sum, category) => {
+            return sum + category.getTotalForPeriod(period);
+        }, 0);
+
+        targetEl.textContent = total;
+    }
+
+    _handlePeriodChange() {
+        this._createHTMLCategoriesWithStrings(this._categories, this._categoriesListEl);
+        this._setTotalAmount(this._categories, this._totalAmountSpan, this._periodSelect.value);
+        // Обновите обработчики событий для элементов категории
+        console.log('updated page');
+        console.log(this._categoryNameEls);
+        this._categoryNameEls = document.querySelectorAll('.category-name');
+        for (const categoryNameEl of this._categoryNameEls) {
+            console.log(' trying to add listeners ')
+            categoryNameEl.removeEventListener('click', this._handleCategoryClick.bind(this));
+            categoryNameEl.addEventListener('click', this._handleCategoryClick.bind(this));
+        }
+    }
+
+    _handleCategoryClick(e) {
+        e.preventDefault();
+        const categorySelected = e.target.textContent;
+        console.log(categorySelected);
+        window.location.href = `category.html?category=${categorySelected}&period=${this._periodSelect.value}`;
+    }
+
+    _setHandlersToCategoryClick() {
+        for (const categoryNameEl of this._categoryNameEls) {
+            categoryNameEl.addEventListener('click', this._handleCategoryClick.bind(this));
+        }
+    }
+
+}
+
+const homepage = new Homepage();
+export let categories = homepage.myCategories;
 
 
 

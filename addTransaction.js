@@ -1,6 +1,13 @@
 import { Category, Transaction } from './app.js';
 import { categories } from './app.js';
 
+const urlSearchParams = new URLSearchParams(window.location.search);
+const categoryName = urlSearchParams.get('category');
+
+const categorySelectEl = document.getElementById('category');
+const option = categorySelectEl.querySelector(`option[value="${categoryName}"]`);
+option.selected = true;
+
 // Функция для добавления транзакции
 async function addTransaction(dateValue, amountValue, categoryValue) {
     const trans = new Transaction(dateValue, amountValue, categoryValue);
