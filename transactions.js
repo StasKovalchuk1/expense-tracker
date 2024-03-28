@@ -53,6 +53,14 @@ class M {
 
             this._filteredTransactions = this._filteredTransactions.filter(transaction => transaction !== deletedTransaction);
             this._createHtmlWithStrings();
+            localStorage.setItem('categories', JSON.stringify({
+                type: 'Categories',
+                data: categories.map(category => ({
+                    name: category.name,
+                    transactions: category.transactions,
+                    color: category.color
+                })),
+            }));
         } catch (error) {
             console.error('Error deleting transaction:', error);
         }

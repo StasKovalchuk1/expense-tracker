@@ -51,9 +51,6 @@ async function addTransaction(dateValue, amountValue, categoryValue) {
                 color: category.color
             })),
         }));
-        // console.log(localStorage.getItem('categories'))
-
-        // console.log('Transaction added and local storage updated successfully!');
 
         window.location.href = "homepage.html";
     }
