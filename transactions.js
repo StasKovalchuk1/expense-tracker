@@ -21,6 +21,41 @@ class M {
         document.getElementById('add-transaction-button').addEventListener('click',
             (e) => window.location.href = `addTransaction.html?category=${this._categoryName}`);
 
+        this._transactionsListEl.addEventListener('click', this._handleDeleteTransaction.bind(this));
+    }
+
+    _handleDeleteTransaction(event) {
+        if (event.target.tagName.toLowerCase() !== 'a' || !event.target.textContent.includes('delete')) {
+            return;
+        }
+
+        const transactionLi = event.target.closest('li');
+        if (!transactionLi) {
+            return;
+        }
+
+        const date = event.target.className;
+        const amount = parseFloat(transactionLi.querySelector('.transaction-amount').textContent.split(' ')[0]);
+        const deletedTransaction = this._filteredTransactions.find(transaction => {
+            return transaction.date.toLocaleDateString() === date &&
+                parseFloat(transaction.amount) === amount;
+        });
+
+        console.log(deletedTransaction)
+
+        if (!deletedTransaction) {
+            return;
+        }
+
+        try {
+            const index = this._categoryObj.transactions.findIndex(transaction => transaction.id === deletedTransaction.id);
+            this._categoryObj.transactions.splice(index, 1);
+
+            this._filteredTransactions = this._filteredTransactions.filter(transaction => transaction !== deletedTransaction);
+            this._createHtmlWithStrings();
+        } catch (error) {
+            console.error('Error deleting transaction:', error);
+        }
     }
 
     _createHtmlWithStrings() {
@@ -42,11 +77,11 @@ class M {
 
             for (const transaction of groupedTransactions[date]) {
                 transactionsHtmlArray.push(`
-        <li>
-<!--          <span class="transaction-name">${transaction.name}</span>-->
-          <span class="transaction-amount">${transaction.amount} Kč</span>
-        </li>
-      `);
+                    <li>
+                      <span class="transaction-amount">${transaction.amount} Kč</span>
+                      <a class="${date}">delete</a>
+                    </li>
+                `);
             }
 
             transactionsHtmlArray.push(`</ul>`);
@@ -54,8 +89,7 @@ class M {
             transactionsHtmlArray.push(`<div class="total-amount">${this._calculateTotalAmount(groupedTransactions[date])} Kč</div>`);
         }
 
-        let transactionsHtml = transactionsHtmlArray.join('');
-        this._transactionsListEl.innerHTML = transactionsHtml;
+        this._transactionsListEl.innerHTML = transactionsHtmlArray.join('');
     }
 
     _calculateTotalAmount(transactions) {

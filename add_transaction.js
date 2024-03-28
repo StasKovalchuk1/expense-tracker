@@ -5,8 +5,18 @@ const urlSearchParams = new URLSearchParams(window.location.search);
 const categoryName = urlSearchParams.get('category');
 
 const categorySelectEl = document.getElementById('category');
-const option = categorySelectEl.querySelector(`option[value="${categoryName}"]`);
-option.selected = true;
+
+for (const category of categories) {
+    const optionElement = document.createElement('option');
+    optionElement.value = category.name;
+    optionElement.textContent = category.name;
+    categorySelectEl.appendChild(optionElement);
+}
+
+if (categoryName) {
+    const option = categorySelectEl.querySelector(`option[value="${categoryName}"]`);
+    if (option) option.selected = true;
+}
 
 // Функция для добавления транзакции
 async function addTransaction(dateValue, amountValue, categoryValue) {
@@ -16,7 +26,7 @@ async function addTransaction(dateValue, amountValue, categoryValue) {
     const storedCategories = localStorage.getItem('categories');
     const categoriesData = JSON.parse(storedCategories);
     if (categoriesData.type === 'Categories') {
-        const categories = categoriesData.data.map(categoryData => new Category(categoryData.name, categoryData.transactions));
+        const categories = categoriesData.data.map(categoryData => new Category(categoryData.name, categoryData.transactions, categoryData.color));
 
         console.log(categories[0].getName())
 
@@ -38,11 +48,12 @@ async function addTransaction(dateValue, amountValue, categoryValue) {
             data: categories.map(category => ({
                 name: category.name,
                 transactions: category.transactions,
+                color: category.color
             })),
         }));
-        console.log(localStorage.getItem('categories'))
+        // console.log(localStorage.getItem('categories'))
 
-        console.log('Transaction added and local storage updated successfully!');
+        // console.log('Transaction added and local storage updated successfully!');
 
         window.location.href = "homepage.html";
     }

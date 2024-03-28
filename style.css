@@ -88,6 +88,11 @@ main {
 
 .add-transaction {
     text-align: center;
+    margin-bottom: 15px;
+}
+
+.add-transaction button{
+    width: 100px;
 }
 
 #add-transaction-button {
@@ -154,8 +159,9 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 0;
+    padding: 5px 5px;
 }
+
 
 .transaction-name {
     font-weight: bold;
@@ -213,4 +219,26 @@ main {
 
 .add-transaction-form button:hover {
     background-color: #ddd;
+}
+
+.chart-container {
+    width: 500px;
+    margin: 25px auto 0;
+}
+
+#add-category-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+#category-name {
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 300px;
+}
+
+#category-color {
+    margin-bottom: 10px;
+    width: 100px;
 }

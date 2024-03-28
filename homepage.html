@@ -3,35 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ведение трат</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+    <title>Expenses Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-    <h1>Ведение трат</h1>
+    <h1>Expenses Tracker</h1>
     <div class="period-selector">
-        <label for="period">Период:</label>
+        <label for="period">Period:</label>
         <select id="period" name="period">
-            <option value="week">Неделя</option>
-            <option value="month">Месяц</option>
-            <option value="quarter">Квартал</option>
-            <option value="year">Год</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+            <option value="quarter">Quarter</option>
+            <option value="year">Year</option>
         </select>
     </div>
 </header>
 <main>
     <section class="total-expenses">
-        <h2>Общий расход:</h2>
-        <span id="total-amount">100 Kč</span>
+        <h2>Total expenses:</h2>
+        <span id="total-amount"></span>
     </section>
     <section class="categories">
-        <h2>Категории:</h2>
+        <h2>Categories:</h2>
         <ul class="categories-list"></ul>
     </section>
     <section class="add-transaction">
         <button id="add-transaction-button-homepage">
             <span class="material-icons">add</span>
         </button>
+    </section>
+    <section class="add-transaction">
+        <button id="new-category-button-homepage">
+            <span class="material-icons">new category</span>
+        </button>
+    </section>
+    <section class="chart-container">
+        <canvas id="my-chart"></canvas>
     </section>
 </main>
 <script src="app.js" type="module" defer></script>
