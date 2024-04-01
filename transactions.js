@@ -48,11 +48,16 @@ class M {
         }
 
         try {
-            const index = this._categoryObj.transactions.findIndex(transaction => transaction.id === deletedTransaction.id);
+            const index = this._categoryObj.transactions.findIndex(transaction =>
+                (new Date(transaction.date).getTime() === deletedTransaction.date.getTime()) && (transaction.amount === deletedTransaction.amount)
+            );
+            console.log(index)
             this._categoryObj.transactions.splice(index, 1);
 
             this._filteredTransactions = this._filteredTransactions.filter(transaction => transaction !== deletedTransaction);
+            console.log(this._filteredTransactions)
             this._createHtmlWithStrings();
+            this._setHeader();
             localStorage.setItem('categories', JSON.stringify({
                 type: 'Categories',
                 data: categories.map(category => ({
@@ -69,21 +74,29 @@ class M {
     _createHtmlWithStrings() {
         this._transactionsListEl.innerHTML = '';
 
-        const groupedTransactions = this._filteredTransactions.reduce((groups, transaction) => {
-            const date = transaction.date.toLocaleDateString();
-            groups[date] = groups[date] || [];
-            groups[date].push(transaction);
-            return groups;
-        }, {});
+        const transactionsByDate = {};
+
+        this._filteredTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        this._filteredTransactions.forEach(transaction => {
+            if (!transactionsByDate[transaction.date]) {
+                transactionsByDate[transaction.date] = [];
+            }
+
+            transactionsByDate[transaction.date].push(transaction);
+        });
+
+        const groupedTransactions = Object.values(transactionsByDate);
 
         let transactionsHtmlArray = [];
 
-        for (const date in groupedTransactions) {
+        for (const group in groupedTransactions) {
+            const date = groupedTransactions[group][0].date.toLocaleDateString()
             transactionsHtmlArray.push(`<li class="date">${date}</li>`);
 
             transactionsHtmlArray.push(`<ul class="transactions">`);
 
-            for (const transaction of groupedTransactions[date]) {
+            for (const transaction of groupedTransactions[group]) {
                 transactionsHtmlArray.push(`
                     <li>
                       <span class="transaction-amount">${transaction.amount} Kč</span>
@@ -94,7 +107,7 @@ class M {
 
             transactionsHtmlArray.push(`</ul>`);
 
-            transactionsHtmlArray.push(`<div class="total-amount">${this._calculateTotalAmount(groupedTransactions[date])} Kč</div>`);
+            transactionsHtmlArray.push(`<div class="total-amount">${this._calculateTotalAmount(groupedTransactions[group])} Kč</div>`);
         }
 
         this._transactionsListEl.innerHTML = transactionsHtmlArray.join('');
