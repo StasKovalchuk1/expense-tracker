@@ -86,17 +86,14 @@ main {
     font-style: italic;
 }
 
-.add-transaction {
+.add-transaction, .add-category {
     text-align: center;
     margin-bottom: 15px;
 }
 
 .add-transaction button{
-    width: 100px;
-}
-
-#add-transaction-button {
-    padding: 10px 20px;
+    width: 110px;
+    padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
@@ -105,11 +102,25 @@ main {
     transition: 0.2s;
 }
 
-#add-transaction-button:hover {
+.add-category button{
+    width: 110px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+    transition: 0.2s;
+}
+
+.add-transaction button:hover {
     background-color: #ddd;
 }
 
-/* CSS с второй страницы */
+.add-category button:hover {
+    background-color: #ddd;
+}
+
 
 #back-button {
     padding: 5px 10px;
@@ -162,6 +173,15 @@ main {
     padding: 5px 5px;
 }
 
+.transactions li:hover {
+    background-color: #e0e0e0; /* Highlight on hover */
+}
+
+.transactions li.removing {
+    opacity: 0; /* Fade out the element */
+    transform: translateX(0) scale(0.8) rotateX(-45deg) rotateY(45deg); /* Animate removal */
+    transition: all 0.5s ease-in-out; /* Adjust animation duration as needed */
+}
 
 .transaction-name {
     font-weight: bold;

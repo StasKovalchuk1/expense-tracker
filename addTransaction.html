@@ -10,31 +10,24 @@
 <header>
     <h1>Добавить транзакцию</h1>
     <button id="back-button">
-        <span class="material-icons">arrow_back</span>
-        Назад
+        Home
     </button>
 </header>
 <main>
-    <section class="add-transaction-form">
+    <div class="add-transaction-form">
         <form action="#" id="add-transaction-form">
             <label for="amount">Сумма:</label>
-            <input type="number" id="amount" name="amount" placeholder="Введите сумму">
+            <input type="number" id="amount" name="amount" placeholder="Введите сумму" min="1">
             <label for="category">Category:</label>
-            <select id="category" name="category">
-<!--                <option value="">Выберите категорию</option>-->
-<!--                <option value="Food">Food</option>-->
-<!--                <option value="Transport">Transport</option>-->
-<!--                <option value="Hobby">Hobby</option>-->
-<!--                <option value="Party">Party</option>-->
-<!--                <option value="House">House</option>-->
-<!--                <option value="Other">Other</option>-->
-            </select>
+            <select id="category" name="category"></select>
             <label for="date">Дата:</label>
-            <input type="date" id="date" name="date">
-            <button type="submit" id="add-transaction-button-finally">add</button>
+            <input type="date" id="date" name="date" required>
+            <div class="add-transaction">
+                <button type="submit" id="submit">submit</button>
+            </div>
         </form>
-    </section>
+    </div>
 </main>
-<script src="add_transaction.js" type="module" defer></script>
+<script src="add_transaction.js" type="module"></script>
 </body>
 </html>

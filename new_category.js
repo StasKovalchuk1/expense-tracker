@@ -1,4 +1,12 @@
 const addCategoryForm = document.getElementById("add-category-form");
+const urlSearchParams = new URLSearchParams(window.location.search);
+const period = urlSearchParams.get('period');
+
+document.getElementById('back-button').addEventListener('click',
+    () => {
+        if (period) window.location.href = `homepage.html?period=${period}`;
+        else window.location.href = `homepage.html`;
+    });
 
 function hexToRgb(hex) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -27,5 +35,6 @@ addCategoryForm.addEventListener("submit", (e) => {
 
     categories.data.push(newCategory);
     localStorage.setItem("categories", JSON.stringify(categories));
-    window.location.href = "homepage.html"
+    if (period) window.location.href = `homepage.html?period=${period}`;
+    else window.location.href = `homepage.html`;
 })

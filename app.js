@@ -111,20 +111,6 @@ export class Transaction {
 
 class Homepage {
     constructor() {
-        this._addTransactionButton = document.querySelector('#add-transaction-button-homepage');
-        if (this._addTransactionButton) {
-            this._addTransactionButton.addEventListener('click', (e) => {
-                window.location.href = "addTransaction.html";
-            })
-        }
-
-        this._newCategoryButton = document.querySelector('#new-category-button-homepage');
-        if (this._newCategoryButton) {
-            this._newCategoryButton.addEventListener('click', (e) => {
-                window.location.href = "newcategory.html";
-            })
-        }
-
         this._initialCategories = [
             new Category("Transport", [], "rgba(255, 99, 132, 0.2)"),
             new Category("House", [], "rgba(54, 162, 235, 0.2)"),
@@ -134,6 +120,10 @@ class Homepage {
         ];
 
         this._periodSelect = document.getElementById('period');
+
+        this._urlSearchParams = new URLSearchParams(window.location.search);
+        this._period = this._urlSearchParams.get('period');
+
         this._totalAmountSpan = document.getElementById('total-amount');
 
         this._categories = this._getCategoriesFromLocalStorage();
@@ -141,9 +131,24 @@ class Homepage {
 
         this._categoriesListEl = document.querySelector('.categories-list');
 
-        if (this._categories && this._totalAmountSpan && this._periodSelect.value && this._categoriesListEl) {
+        if (this._categories && this._totalAmountSpan && this._periodSelect && this._categoriesListEl) {
+            if (this._period) this._periodSelect.value = this._period;
             this._setTotalAmount(this._categories, this._totalAmountSpan, this._periodSelect.value);
             this._createHTMLCategoriesWithStrings(this._categories, this._categoriesListEl);
+        }
+
+        this._addTransactionButton = document.querySelector('#add-transaction-button-homepage');
+        if (this._addTransactionButton) {
+            this._addTransactionButton.addEventListener('click', (e) => {
+                window.location.href = `addTransaction.html?period=${this._periodSelect.value}`;
+            })
+        }
+
+        this._newCategoryButton = document.querySelector('#new-category-button-homepage');
+        if (this._newCategoryButton) {
+            this._newCategoryButton.addEventListener('click', (e) => {
+                window.location.href = `newCategory.html?period=${this._periodSelect.value}`;
+            })
         }
 
         this._categoryNameEls = document.querySelectorAll('.category-name');
@@ -213,9 +218,7 @@ class Homepage {
     _handlePeriodChange() {
         this._createHTMLCategoriesWithStrings(this._categories, this._categoriesListEl);
         this._setTotalAmount(this._categories, this._totalAmountSpan, this._periodSelect.value);
-        // Обновите обработчики событий для элементов категории
-        console.log('updated page');
-        console.log(this._categoryNameEls);
+
         this._categoryNameEls = document.querySelectorAll('.category-name');
         for (const categoryNameEl of this._categoryNameEls) {
             categoryNameEl.removeEventListener('click', this._handleCategoryClick.bind(this));
@@ -229,7 +232,7 @@ class Homepage {
         e.preventDefault();
         const categorySelected = e.target.textContent;
         console.log(categorySelected);
-        window.location.href = `category.html?category=${categorySelected}&period=${this._periodSelect.value}`;
+        window.location.href = `transactions.html?category=${categorySelected}&period=${this._periodSelect.value}`;
     }
 
     _setHandlersToCategoryClick() {

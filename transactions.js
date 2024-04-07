@@ -21,6 +21,9 @@ class M {
         document.getElementById('add-transaction-button').addEventListener('click',
             (e) => window.location.href = `addTransaction.html?category=${this._categoryName}`);
 
+        document.getElementById('back-button').addEventListener('click',
+            () => window.location.href = `homepage.html?period=${this._period}`)
+
         this._transactionsListEl.addEventListener('click', this._handleDeleteTransaction.bind(this));
     }
 
@@ -56,16 +59,21 @@ class M {
 
             this._filteredTransactions = this._filteredTransactions.filter(transaction => transaction !== deletedTransaction);
             console.log(this._filteredTransactions)
-            this._createHtmlWithStrings();
-            this._setHeader();
-            localStorage.setItem('categories', JSON.stringify({
-                type: 'Categories',
-                data: categories.map(category => ({
-                    name: category.name,
-                    transactions: category.transactions,
-                    color: category.color
-                })),
-            }));
+
+            transactionLi.classList.add('removing');
+
+            setTimeout(() => {
+                this._createHtmlWithStrings();
+                this._setHeader();
+                localStorage.setItem('categories', JSON.stringify({
+                    type: 'Categories',
+                    data: categories.map(category => ({
+                        name: category.name,
+                        transactions: category.transactions,
+                        color: category.color
+                    })),
+                }));
+            }, 500);
         } catch (error) {
             console.error('Error deleting transaction:', error);
         }
