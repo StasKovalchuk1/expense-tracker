@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавить транзакцию</title>
+    <title>Add Transaction</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-    <h1>Добавить транзакцию</h1>
+    <h1>Add Transaction</h1>
     <button id="back-button">
         Home
     </button>
@@ -16,12 +16,15 @@
 <main>
     <div class="add-transaction-form">
         <form action="#" id="add-transaction-form">
-            <label for="amount">Сумма:</label>
-            <input type="number" id="amount" name="amount" placeholder="Введите сумму" min="1">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" placeholder="Enter amount" min="1">
+            <span id="transaction-amount-error" class="error-message"></span>
             <label for="category">Category:</label>
             <select id="category" name="category"></select>
-            <label for="date">Дата:</label>
+            <span id="category-name-error" class="error-message"></span>
+            <label for="date">Date:</label>
             <input type="date" id="date" name="date" required>
+            <span id="date-error" class="error-message"></span>
             <div class="add-transaction">
                 <button type="submit" id="submit">submit</button>
             </div>

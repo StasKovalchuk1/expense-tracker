@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавить категорию</title>
+    <title>Add category</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-    <h1>Добавить категорию</h1>
+    <h1>Add category</h1>
     <button id="back-button">
         Home
     </button>
 </header>
 <form id="add-category-form">
-    <label for="category-name">Название категории:</label>
+    <label for="category-name">Name:</label>
     <input type="text" id="category-name" name="category-name" required>
+    <span id="category-name-error" class="error-message"></span>
     <br>
-    <label for="category-color">Цвет категории:</label>
+    <label for="category-color">Color:</label>
     <input type="color" id="category-color" name="category-color">
     <br>
-    <button type="submit">Добавить</button>
+    <div class="category-submit">
+        <button type="submit" class="add-button">Submit</button>
+    </div>
 </form>
 <script src="new_category.js"></script>
 </body>

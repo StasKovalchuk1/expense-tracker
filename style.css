@@ -91,8 +91,8 @@ main {
     margin-bottom: 15px;
 }
 
-.add-transaction button{
-    width: 110px;
+.add-button {
+    width: 120px;
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -102,25 +102,9 @@ main {
     transition: 0.2s;
 }
 
-.add-category button{
-    width: 110px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #fff;
-    color: #000;
-    transition: 0.2s;
-}
-
-.add-transaction button:hover {
+.add-button:hover {
     background-color: #ddd;
 }
-
-.add-category button:hover {
-    background-color: #ddd;
-}
-
 
 #back-button {
     padding: 5px 10px;
@@ -174,13 +158,13 @@ main {
 }
 
 .transactions li:hover {
-    background-color: #e0e0e0; /* Highlight on hover */
+    background-color: #e0e0e0;
 }
 
 .transactions li.removing {
-    opacity: 0; /* Fade out the element */
-    transform: translateX(0) scale(0.8) rotateX(-45deg) rotateY(45deg); /* Animate removal */
-    transition: all 0.5s ease-in-out; /* Adjust animation duration as needed */
+    opacity: 0;
+    transform: scale(0.8) rotateX(-45deg) rotateY(45deg);
+    transition: all 0.5s ease-in-out;
 }
 
 .transaction-name {
@@ -196,8 +180,6 @@ main {
     text-align: left;
     margin-bottom: 10px;
 }
-
-/* CSS с третьей страницы */
 
 .add-transaction-form {
     margin-bottom: 20px;
@@ -261,4 +243,15 @@ main {
 #category-color {
     margin-bottom: 10px;
     width: 100px;
+}
+
+.category-submit {
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

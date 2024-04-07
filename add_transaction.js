@@ -4,6 +4,9 @@ import { categories } from './app.js';
 class AddTransaction {
     constructor() {
         this._addTransactionForm = document.querySelector('#add-transaction-form');
+        this._transactionAmountError = document.getElementById("transaction-amount-error");
+        this._categoryNameError = document.getElementById("category-name-error");
+        this._dateError = document.getElementById("date-error");
         this._addTransactionForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -55,9 +58,10 @@ class AddTransaction {
             console.log(selectedCategory)
 
             if (selectedCategory) {
-                console.log("try to add")
-                selectedCategory.addTransaction(trans);
+                if (this._validate(amountValue, dateValue)) selectedCategory.addTransaction(trans);
+                else return;
             } else {
+                this._categoryNameError.textContent = "Need to choose category";
                 console.warn('Category not found:', categoryValue);
             }
 
@@ -75,6 +79,18 @@ class AddTransaction {
             else window.location.href = `homepage.html`;
         }
 
+    }
+
+    _validate(amount, date) {
+        if (amount < 1) {
+            this._transactionAmountError.textContent = "Wrong amount";
+            return false;
+        }
+        if (date === null) {
+            this._dateError.textContent = "Wrong date";
+            return false;
+        }
+        return true;
     }
 
 }

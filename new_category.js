@@ -1,4 +1,5 @@
 const addCategoryForm = document.getElementById("add-category-form");
+const categoryNameError = document.getElementById('category-name-error');
 const urlSearchParams = new URLSearchParams(window.location.search);
 const period = urlSearchParams.get('period');
 
@@ -17,6 +18,17 @@ function hexToRgb(hex) {
     ] : null;
 }
 
+function validate(categories, inputName) {
+    console.log(categories)
+    if (inputName.length < 0) return false;
+    for (const category of categories.data) {
+        console.log(category.name)
+        if (category.name.toLowerCase() === inputName.toLowerCase()) return false;
+    }
+    return true;
+}
+
+
 addCategoryForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -27,14 +39,21 @@ addCategoryForm.addEventListener("submit", (e) => {
 
     const categories = JSON.parse(localStorage.getItem("categories"));
 
-    const newCategory = {
-        name: categoryName,
-        transactions: [],
-        color: transparentColor
-    };
+    if (validate(categories, categoryName)) {
+        console.log("yes")
+        const newCategory = {
+            name: categoryName,
+            transactions: [],
+            color: transparentColor
+        };
 
-    categories.data.push(newCategory);
-    localStorage.setItem("categories", JSON.stringify(categories));
-    if (period) window.location.href = `homepage.html?period=${period}`;
-    else window.location.href = `homepage.html`;
+        categories.data.push(newCategory);
+        localStorage.setItem("categories", JSON.stringify(categories));
+        if (period) window.location.href = `homepage.html?period=${period}`;
+        else window.location.href = `homepage.html`;
+
+    } else {
+        categoryNameError.textContent = "Wrong name";
+
+    }
 })
