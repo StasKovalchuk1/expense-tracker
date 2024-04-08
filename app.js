@@ -134,7 +134,7 @@ class Homepage {
         if (this._categories && this._totalAmountSpan && this._periodSelect && this._categoriesListEl) {
             if (this._period) this._periodSelect.value = this._period;
             this._setTotalAmount(this._categories, this._totalAmountSpan, this._periodSelect.value);
-            this._createHTMLCategoriesWithStrings(this._categories, this._categoriesListEl);
+            this._createHTMLCategoriesWithStrings();
         }
 
         this._addTransactionButton = document.querySelector('#add-transaction-button-homepage');
@@ -162,6 +162,8 @@ class Homepage {
             this._chart = null;
             this._drawGraph(this._ctx);
         }
+
+        this._categoriesListEl.addEventListener('click', this._handleDeleteCategory.bind(this));
     }
 
     get myCategories() {
@@ -186,33 +188,33 @@ class Homepage {
         return JSON.parse(storedCategories).data.map(categoryData => new Category(categoryData.name, categoryData.transactions, categoryData.color));
     }
 
-    _createHTMLCategoriesWithStrings(categories, targetEl) {
-        targetEl.innerHTML = '';
+    _createHTMLCategoriesWithStrings() {
+        this._categoriesListEl.innerHTML = '';
 
         const selectedPeriod = this._periodSelect.value;
-        console.log(selectedPeriod)
 
-        let categoriesHtmlArray = categories.map( (category) =>{
+        let categoriesHtmlArray = this._categories.map( (category) =>{
             const html = `
                     <li>
                         <span class="category-name">${ category.getName() }</span>
                         <span class="category-amount">${ category.getTotalForPeriod(selectedPeriod) }</span>
+                        <img src="img/delete.png" alt="${category.getName()}" class="delete">
                     </li>
                 `;
 
             return html;
         })
-        let categoriesHtml = categoriesHtmlArray.join('');
-        targetEl.innerHTML = categoriesHtml;
+        const categoriesHtml = categoriesHtmlArray.join('');
+        this._categoriesListEl.innerHTML = categoriesHtml;
 
     }
 
-    _setTotalAmount(categories, targetEl, period) {
-        let total = categories.reduce((sum, category) => {
-            return sum + category.getTotalForPeriod(period);
+    _setTotalAmount() {
+        let total = this._categories.reduce((sum, category) => {
+            return sum + category.getTotalForPeriod(this._periodSelect.value);
         }, 0);
 
-        targetEl.textContent = total;
+        this._totalAmountSpan.textContent = total;
     }
 
     _handlePeriodChange() {
@@ -231,7 +233,6 @@ class Homepage {
     _handleCategoryClick(e) {
         e.preventDefault();
         const categorySelected = e.target.textContent;
-        console.log(categorySelected);
         window.location.href = `transactions.html?category=${categorySelected}&period=${this._periodSelect.value}`;
     }
 
@@ -275,6 +276,35 @@ class Homepage {
     _modifyString(str, newChars) {
         const slicedStr = str.slice(0, -4);
         return slicedStr.concat(newChars);
+    }
+
+    _handleDeleteCategory(event) {
+        if (event.target.tagName.toLowerCase() !== 'img') {
+            return;
+        }
+
+        const categoryDeleteName = event.target.alt;
+        if (!categoryDeleteName) {
+            return;
+        }
+
+        try {
+            this._categories = this._categories.filter(category => category.name !== categoryDeleteName)
+            this._createHTMLCategoriesWithStrings();
+            this._setTotalAmount();
+            this._chart.destroy();
+            this._drawGraph(this._ctx);
+            localStorage.setItem('categories', JSON.stringify({
+                type: 'Categories',
+                data: this._categories.map(category => ({
+                    name: category.name,
+                    transactions: category.transactions,
+                    color: category.color
+                })),
+            }));
+        } catch (error) {
+            console.error('Error deleting transaction:', error);
+        }
     }
 
 }

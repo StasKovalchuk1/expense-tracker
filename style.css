@@ -65,8 +65,8 @@ main {
 }
 
 .categories li {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
     align-items: center;
     padding: 5px 10px;
     border: 1px solid #ccc;
@@ -76,6 +76,7 @@ main {
 
 .category-name {
     font-weight: bold;
+    grid-column: 1;
 }
 
 .category-name:hover {
@@ -83,7 +84,16 @@ main {
 }
 
 .category-amount {
+    grid-column: 2;
     font-style: italic;
+    margin-right: 15px;
+}
+
+.delete {
+    grid-column: 3;
+    height: 20px;
+    background-color: white;
+    cursor: pointer;
 }
 
 .add-transaction, .add-category {
@@ -255,3 +265,4 @@ main {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
