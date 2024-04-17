@@ -2,6 +2,11 @@ import { Category, Transaction } from './app.js';
 import { categories } from './app.js';
 
 class AddTransaction {
+
+    /**
+     * Constructor for AddTransaction page
+     * @constructor
+     */
     constructor() {
         this._addTransactionForm = document.querySelector('#add-transaction-form');
         this._transactionAmountError = document.getElementById("transaction-amount-error");
@@ -42,45 +47,52 @@ class AddTransaction {
 
     }
 
+    /**
+     * Adds transaction to category
+     * @param dateValue
+     * @param amountValue
+     * @param categoryValue
+     * @returns {Promise<void>}
+     * @private
+     */
     async _addTransaction(dateValue, amountValue, categoryValue) {
         const trans = new Transaction(dateValue, amountValue, categoryValue);
 
-        // Получение категорий из локального хранилища
         const storedCategories = localStorage.getItem('categories');
         const categoriesData = JSON.parse(storedCategories);
-        if (categoriesData.type === 'Categories') {
-            const categories = categoriesData.data.map(categoryData => new Category(categoryData.name, categoryData.transactions, categoryData.color));
 
-            console.log(categories[0].getName())
+        const categories = categoriesData.data.map(categoryData => new Category(categoryData.name, categoryData.transactions, categoryData.color));
 
-            const selectedCategory = categories.find(category => category.getName() === categoryValue);
+        const selectedCategory = categories.find(category => category.getName() === categoryValue);
 
-            console.log(selectedCategory)
-
-            if (selectedCategory) {
-                if (this._validate(amountValue, dateValue)) selectedCategory.addTransaction(trans);
-                else return;
-            } else {
-                this._categoryNameError.textContent = "Need to choose category";
-                console.warn('Category not found:', categoryValue);
-            }
-
-            // Обновление локального хранилища
-            localStorage.setItem('categories', JSON.stringify({
-                type: 'Categories',
-                data: categories.map(category => ({
-                    name: category.name,
-                    transactions: category.transactions,
-                    color: category.color
-                })),
-            }));
-
-            if (this._period) window.location.href = `homepage.html?period=${this._period}`;
-            else window.location.href = `homepage.html`;
+        if (selectedCategory) {
+            if (this._validate(amountValue, dateValue)) selectedCategory.addTransaction(trans);
+            else return;
+        } else {
+            this._categoryNameError.textContent = "Need to choose category";
+            console.warn('Category not found:', categoryValue);
         }
+
+        localStorage.setItem('categories', JSON.stringify({
+            data: categories.map(category => ({
+                name: category.name,
+                transactions: category.transactions,
+                color: category.color
+            })),
+        }));
+
+        if (this._period) window.location.href = `homepage.html?period=${this._period}`;
+        else window.location.href = `homepage.html`;
 
     }
 
+    /**
+     * Validates inputs
+     * @param amount
+     * @param date
+     * @returns {boolean}
+     * @private
+     */
     _validate(amount, date) {
         if (amount < 1) {
             this._transactionAmountError.textContent = "Wrong amount";

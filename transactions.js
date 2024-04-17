@@ -1,7 +1,12 @@
 import { Category, Transaction } from './app.js';
 import { categories } from './app.js';
 
-class M {
+class CategoryTransactionsPage {
+
+    /**
+     * Constructor for category transactions page
+     * @constructor
+     */
     constructor() {
         this._header = document.querySelector('.category-name-h1');
         this._expensesEl = document.querySelector('.category-expenses-h2');
@@ -11,8 +16,10 @@ class M {
         this._period = this._urlSearchParams.get('period');
 
         this._categoryObj = categories.find(category => category.name === this._categoryName)
-        this._filteredTransactions = this._categoryObj.getTransactionsForPeriod(this._period)
-            .map(transactionData => new Transaction(new Date(transactionData.date), transactionData.amount));
+        if (this._period && this._categoryObj) {
+            this._filteredTransactions = this._categoryObj.getTransactionsForPeriod(this._period)
+                .map(transactionData => new Transaction(new Date(transactionData.date), transactionData.amount));
+        }
         this._transactionsListEl = document.querySelector('.transactions-list');
 
         this._setHeader();
@@ -27,6 +34,11 @@ class M {
         this._transactionsListEl.addEventListener('click', this._handleDeleteTransaction.bind(this));
     }
 
+    /**
+     * Handles delete transaction event
+     * @param event - click on delete transaction
+     * @private
+     */
     _handleDeleteTransaction(event) {
         if (event.target.tagName.toLowerCase() !== 'a' || !event.target.textContent.includes('delete')) {
             return;
@@ -66,7 +78,6 @@ class M {
                 this._createHtmlWithStrings();
                 this._setHeader();
                 localStorage.setItem('categories', JSON.stringify({
-                    type: 'Categories',
                     data: categories.map(category => ({
                         name: category.name,
                         transactions: category.transactions,
@@ -79,6 +90,10 @@ class M {
         }
     }
 
+    /**
+     * Creates HTML with category transactions by asc
+     * @private
+     */
     _createHtmlWithStrings() {
         this._transactionsListEl.innerHTML = '';
 
@@ -121,17 +136,28 @@ class M {
         this._transactionsListEl.innerHTML = transactionsHtmlArray.join('');
     }
 
+    /**
+     * Calculates total amount for transactions expenses
+     * @param transactions - transactions list
+     * @returns {number} - total amount for transactions expenses
+     * @private
+     */
     _calculateTotalAmount(transactions) {
         return transactions.reduce((total, transaction) => {
             return total + parseFloat(transaction.amount);
         }, 0);
     }
 
+    /**
+     * Sets header for CategoryTransactionsPage
+     * @private
+     */
     _setHeader() {
         this._header.textContent = this._categoryName;
-        this._expensesEl.textContent = "Expenses: " + this._categoryObj.getTotalForPeriod(this._period);
+        if (this._categoryObj) this._expensesEl.textContent = "Expenses: " + this._categoryObj.getTotalForPeriod(this._period);
     }
+
 
 }
 
-const m = new M();
+const m = new CategoryTransactionsPage();

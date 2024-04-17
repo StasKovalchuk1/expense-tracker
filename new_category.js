@@ -19,10 +19,8 @@ function hexToRgb(hex) {
 }
 
 function validate(categories, inputName) {
-    console.log(categories)
     if (inputName.length < 0) return false;
     for (const category of categories.data) {
-        console.log(category.name)
         if (category.name.toLowerCase() === inputName.toLowerCase()) return false;
     }
     return true;
@@ -40,7 +38,6 @@ addCategoryForm.addEventListener("submit", (e) => {
     const categories = JSON.parse(localStorage.getItem("categories"));
 
     if (validate(categories, categoryName)) {
-        console.log("yes")
         const newCategory = {
             name: categoryName,
             transactions: [],
