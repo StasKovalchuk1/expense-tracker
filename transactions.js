@@ -22,24 +22,23 @@ class CategoryTransactionsPage {
         }
         this._transactionsListEl = document.querySelector('.transactions-list');
 
-        this._setHeader();
-        this._createHtmlWithStrings();
+        this.setHeader();
+        this.createHtmlWithStrings();
 
         document.getElementById('add-transaction-button').addEventListener('click',
-            (e) => window.location.href = `addTransaction.html?category=${this._categoryName}`);
+            (e) => window.location.href = `addTransaction.html?category=${this._categoryName}&period=${this._period}`);
 
         document.getElementById('back-button').addEventListener('click',
             () => window.location.href = `homepage.html?period=${this._period}`)
 
-        this._transactionsListEl.addEventListener('click', this._handleDeleteTransaction.bind(this));
+        this._transactionsListEl.addEventListener('click', this.handleDeleteTransaction.bind(this));
     }
 
     /**
      * Handles delete transaction event
-     * @param event - click on delete transaction
-     * @private
+     * @param {event} event - click on delete transaction
      */
-    _handleDeleteTransaction(event) {
+    handleDeleteTransaction(event) {
         if (event.target.tagName.toLowerCase() !== 'a' || !event.target.textContent.includes('delete')) {
             return;
         }
@@ -75,8 +74,8 @@ class CategoryTransactionsPage {
             transactionLi.classList.add('removing');
 
             setTimeout(() => {
-                this._createHtmlWithStrings();
-                this._setHeader();
+                this.createHtmlWithStrings();
+                this.setHeader();
                 localStorage.setItem('categories', JSON.stringify({
                     data: categories.map(category => ({
                         name: category.name,
@@ -92,9 +91,8 @@ class CategoryTransactionsPage {
 
     /**
      * Creates HTML with category transactions by asc
-     * @private
      */
-    _createHtmlWithStrings() {
+    createHtmlWithStrings() {
         this._transactionsListEl.innerHTML = '';
 
         const transactionsByDate = {};
@@ -130,7 +128,7 @@ class CategoryTransactionsPage {
 
             transactionsHtmlArray.push(`</ul>`);
 
-            transactionsHtmlArray.push(`<div class="total-amount">${this._calculateTotalAmount(groupedTransactions[group])} Kč</div>`);
+            transactionsHtmlArray.push(`<div class="total-amount">${this.calculateTotalAmount(groupedTransactions[group])} Kč</div>`);
         }
 
         this._transactionsListEl.innerHTML = transactionsHtmlArray.join('');
@@ -138,11 +136,10 @@ class CategoryTransactionsPage {
 
     /**
      * Calculates total amount for transactions expenses
-     * @param transactions - transactions list
+     * @param {Array} transactions - transactions list
      * @returns {number} - total amount for transactions expenses
-     * @private
      */
-    _calculateTotalAmount(transactions) {
+    calculateTotalAmount(transactions) {
         return transactions.reduce((total, transaction) => {
             return total + parseFloat(transaction.amount);
         }, 0);
@@ -150,9 +147,8 @@ class CategoryTransactionsPage {
 
     /**
      * Sets header for CategoryTransactionsPage
-     * @private
      */
-    _setHeader() {
+    setHeader() {
         this._header.textContent = this._categoryName;
         if (this._categoryObj) this._expensesEl.textContent = "Expenses: " + this._categoryObj.getTotalForPeriod(this._period);
     }

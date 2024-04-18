@@ -6,9 +6,9 @@ export class Category {
     /**
      * Constructor for creating Category
      * @constructor
-     * @param name
-     * @param transactions
-     * @param color
+     * @param {string} name - category name
+     * @param {Array} transactions - category transactions
+     * @param {string} color - category color
      */
     constructor(name, transactions, color) {
         this.name = name;
@@ -17,8 +17,9 @@ export class Category {
     }
 
     /**
-     * Add transaction
-     * @param transaction
+     * Adds a transaction to the category's transaction list.
+     *
+     * @param {transaction} transaction - The transaction object to add.
      */
     addTransaction(transaction) {
         this.transactions.push(transaction);
@@ -140,8 +141,8 @@ export class Transaction {
     /**
      * Constructor for transactions
      * @constructor
-     * @param date
-     * @param amount
+     * @param {date} date - transaction date
+     * @param {number} amount - transaction amount
      */
     constructor( date, amount) {
         this.date = date;
@@ -172,15 +173,15 @@ class Homepage {
 
         this._totalAmountSpan = document.getElementById('total-amount');
 
-        this._categories = this._getCategoriesFromLocalStorage();
+        this._categories = this.getCategoriesFromLocalStorage();
         console.log(this._categories);
 
         this._categoriesListEl = document.querySelector('.categories-list');
 
         if (this._categories && this._totalAmountSpan && this._periodSelect && this._categoriesListEl) {
             if (this._period) this._periodSelect.value = this._period;
-            this._setTotalAmount(this._categories, this._totalAmountSpan, this._periodSelect.value);
-            this._createHTMLCategoriesWithStrings();
+            this.setTotalAmount(this._categories, this._totalAmountSpan, this._periodSelect.value);
+            this.createHTMLCategoriesWithStrings();
         }
 
         this._addTransactionButton = document.querySelector('#add-transaction-button-homepage');
@@ -199,17 +200,17 @@ class Homepage {
 
         this._categoryNameEls = document.querySelectorAll('.category-name');
 
-        if (this._periodSelect) this._periodSelect.addEventListener('change', this._handlePeriodChange.bind(this));
-        this._setHandlersToCategoryClick();
+        if (this._periodSelect) this._periodSelect.addEventListener('change', this.handlePeriodChange.bind(this));
+        this.setHandlersToCategoryClick();
 
         this._canvas = document.getElementById("my-chart");
         if (this._canvas) {
             this._ctx = this._canvas.getContext("2d");
             this._chart = null;
-            this._drawGraph(this._ctx);
+            this.drawGraph(this._ctx);
         }
 
-        if (this._categoriesListEl) this._categoriesListEl.addEventListener('click', this._handleDeleteCategory.bind(this));
+        if (this._categoriesListEl) this._categoriesListEl.addEventListener('click', this.handleDeleteCategory.bind(this));
     }
 
     /**
@@ -223,9 +224,8 @@ class Homepage {
     /**
      * Returns categories from Local Storage
      * @returns {Array<Category>} categories list
-     * @private
      */
-    _getCategoriesFromLocalStorage() {
+    getCategoriesFromLocalStorage() {
         const storedCategories = localStorage.getItem('categories');
 
         if (!storedCategories) {
@@ -244,9 +244,8 @@ class Homepage {
 
     /**
      * Creates HTML with categories list
-     * @private
      */
-    _createHTMLCategoriesWithStrings() {
+    createHTMLCategoriesWithStrings() {
         this._categoriesListEl.innerHTML = '';
 
         const selectedPeriod = this._periodSelect.value;
@@ -269,9 +268,8 @@ class Homepage {
 
     /**
      * Sets total amount for selected period
-     * @private
      */
-    _setTotalAmount() {
+    setTotalAmount() {
         let total = this._categories.reduce((sum, category) => {
             return sum + category.getTotalForPeriod(this._periodSelect.value);
         }, 0);
@@ -281,27 +279,25 @@ class Homepage {
 
     /**
      * Handle period change
-     * @private
      */
-    _handlePeriodChange() {
-        this._createHTMLCategoriesWithStrings();
-        this._setTotalAmount();
+    handlePeriodChange() {
+        this.createHTMLCategoriesWithStrings();
+        this.setTotalAmount();
 
         this._categoryNameEls = document.querySelectorAll('.category-name');
         for (const categoryNameEl of this._categoryNameEls) {
-            categoryNameEl.removeEventListener('click', this._handleCategoryClick.bind(this));
-            categoryNameEl.addEventListener('click', this._handleCategoryClick.bind(this));
+            categoryNameEl.removeEventListener('click', this.handleCategoryClick.bind(this));
+            categoryNameEl.addEventListener('click', this.handleCategoryClick.bind(this));
         }
         this._chart.destroy();
-        this._drawGraph(this._ctx);
+        this.drawGraph(this._ctx);
     }
 
     /**
      * Handle click on category
-     * @param e - clicking on category event
-     * @private
+     * @param {event} e - clicking on category event
      */
-    _handleCategoryClick(e) {
+    handleCategoryClick(e) {
         e.preventDefault();
         const categorySelected = e.target.textContent;
         window.location.href = `transactions.html?category=${categorySelected}&period=${this._periodSelect.value}`;
@@ -309,20 +305,18 @@ class Homepage {
 
     /**
      * Sets click handlers on categories
-     * @private
      */
-    _setHandlersToCategoryClick() {
+    setHandlersToCategoryClick() {
         for (const categoryNameEl of this._categoryNameEls) {
-            categoryNameEl.addEventListener('click', this._handleCategoryClick.bind(this));
+            categoryNameEl.addEventListener('click', this.handleCategoryClick.bind(this));
         }
     }
 
     /**
      * Draws graph by category expenses
      * @param ctx - variable to store the 2D rendering context of a canvas element.
-     * @privat
      */
-    _drawGraph(ctx) {
+    drawGraph(ctx) {
         console.log("draw graph was called")
          this._chart = new Chart(ctx, {
             type: "pie",
@@ -332,7 +326,7 @@ class Homepage {
                     {
                         data: this._categories.map(category => category.getTotalForPeriod(this._periodSelect.value)),
                         backgroundColor: this._categories.map(category => category.color),
-                        borderColor: this._categories.map(category => this._modifyString(category.color, "1)")),
+                        borderColor: this._categories.map(category => this.modifyString(category.color, "1)")),
                     },
                 ],
             },
@@ -355,22 +349,20 @@ class Homepage {
 
     /**
      * Change last parameter in rgba color model
-     * @param str - string to modify
-     * @param newChars - chars to add
+     * @param {string} str - string to modify
+     * @param {string} newChars - chars to add
      * @returns {string} - modified string
-     * @private
      */
-    _modifyString(str, newChars) {
+    modifyString(str, newChars) {
         const slicedStr = str.slice(0, -4);
         return slicedStr.concat(newChars);
     }
 
     /**
      * Handles delete category event
-     * @param event - category click event
-     * @private
+     * @param {event} event - category click event
      */
-    _handleDeleteCategory(event) {
+    handleDeleteCategory(event) {
         if (event.target.tagName.toLowerCase() !== 'img') {
             return;
         }
@@ -385,10 +377,10 @@ class Homepage {
 
         try {
             this._categories = this._categories.filter(category => category.name !== categoryDeleteName)
-            this._createHTMLCategoriesWithStrings();
-            this._setTotalAmount();
+            this.createHTMLCategoriesWithStrings();
+            this.setTotalAmount();
             this._chart.destroy();
-            this._drawGraph(this._ctx);
+            this.drawGraph(this._ctx);
             localStorage.setItem('categories', JSON.stringify({
                 data: this._categories.map(category => ({
                     name: category.name,

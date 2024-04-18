@@ -19,7 +19,7 @@ class AddTransaction {
             const categoryValue = document.getElementById('category').value;
             const dateValue = document.getElementById('date').value;
 
-            await this._addTransaction(dateValue, amountValue, categoryValue);
+            await this.addTransaction(dateValue, amountValue, categoryValue);
         });
 
         this._urlSearchParams = new URLSearchParams(window.location.search);
@@ -49,14 +49,13 @@ class AddTransaction {
 
     /**
      * Adds transaction to category
-     * @param dateValue
-     * @param amountValue
-     * @param categoryValue
+     * @param {date} dateValue
+     * @param {number} amountValue
+     * @param {string} categoryValue
      * @returns {Promise<void>}
-     * @private
      */
-    async _addTransaction(dateValue, amountValue, categoryValue) {
-        const trans = new Transaction(dateValue, amountValue, categoryValue);
+    async addTransaction(dateValue, amountValue, categoryValue) {
+        const trans = new Transaction(dateValue, amountValue);
 
         const storedCategories = localStorage.getItem('categories');
         const categoriesData = JSON.parse(storedCategories);
@@ -66,7 +65,7 @@ class AddTransaction {
         const selectedCategory = categories.find(category => category.getName() === categoryValue);
 
         if (selectedCategory) {
-            if (this._validate(amountValue, dateValue)) selectedCategory.addTransaction(trans);
+            if (this.validate(amountValue, dateValue)) selectedCategory.addTransaction(trans);
             else return;
         } else {
             this._categoryNameError.textContent = "Need to choose category";
@@ -88,12 +87,11 @@ class AddTransaction {
 
     /**
      * Validates inputs
-     * @param amount
-     * @param date
+     * @param {number} amount
+     * @param {date} date
      * @returns {boolean}
-     * @private
      */
-    _validate(amount, date) {
+    validate(amount, date) {
         if (amount < 1) {
             this._transactionAmountError.textContent = "Wrong amount";
             return false;
