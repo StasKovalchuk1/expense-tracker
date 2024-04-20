@@ -199,9 +199,9 @@ class Homepage {
         }
 
         this._categoryNameEls = document.querySelectorAll('.category-name');
+        this.setHandlersToCategoryClick();
 
         if (this._periodSelect) this._periodSelect.addEventListener('change', this.handlePeriodChange.bind(this));
-        this.setHandlersToCategoryClick();
 
         this._canvas = document.getElementById("my-chart");
         if (this._canvas) {
@@ -307,6 +307,8 @@ class Homepage {
      * Sets click handlers on categories
      */
     setHandlersToCategoryClick() {
+        console.log("cat click")
+        this._categoryNameEls = document.querySelectorAll('.category-name');
         for (const categoryNameEl of this._categoryNameEls) {
             categoryNameEl.addEventListener('click', this.handleCategoryClick.bind(this));
         }
@@ -377,6 +379,7 @@ class Homepage {
 
         try {
             this._categories = this._categories.filter(category => category.name !== categoryDeleteName)
+            playDeleteSound();
             this.createHTMLCategoriesWithStrings();
             this.setTotalAmount();
             this._chart.destroy();
@@ -388,11 +391,28 @@ class Homepage {
                     color: category.color
                 })),
             }));
+            this.setHandlersToCategoryClick();
         } catch (error) {
             console.error('Error deleting transaction:', error);
         }
     }
 
+}
+
+/**
+ * Plays audio source when element is deleted
+ */
+export function playDeleteSound() {
+    const audioCtx = new AudioContext();
+    const gainNode = audioCtx.createGain();
+    const soundElement = new Audio("audio/delete_sound.mp3");
+
+    soundElement.source = audioCtx.createMediaElementSource(soundElement);
+    soundElement.source.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    soundElement.play();
 }
 
 const homepage = new Homepage();

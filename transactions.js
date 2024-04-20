@@ -1,5 +1,5 @@
 import { Category, Transaction } from './app.js';
-import { categories } from './app.js';
+import { categories, playDeleteSound } from './app.js';
 
 class CategoryTransactionsPage {
 
@@ -62,10 +62,10 @@ class CategoryTransactionsPage {
         }
 
         try {
+            playDeleteSound();
             const index = this._categoryObj.transactions.findIndex(transaction =>
                 (new Date(transaction.date).getTime() === deletedTransaction.date.getTime()) && (transaction.amount === deletedTransaction.amount)
             );
-            console.log(index)
             this._categoryObj.transactions.splice(index, 1);
 
             this._filteredTransactions = this._filteredTransactions.filter(transaction => transaction !== deletedTransaction);

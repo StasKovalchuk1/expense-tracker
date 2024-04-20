@@ -9,6 +9,12 @@ document.getElementById('back-button').addEventListener('click',
         else window.location.href = `homepage.html`;
     });
 
+
+/**
+ * Converts hex to rgb
+ * @param {string }hex - hex color code
+ * @returns {number[]|null} - values for tgb color code
+ */
 function hexToRgb(hex) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? [
@@ -18,6 +24,12 @@ function hexToRgb(hex) {
     ] : null;
 }
 
+/**
+ * Validates new category name
+ * @param {Array} categories - categories from local storage
+ * @param {string} inputName - name from input
+ * @returns {boolean}
+ */
 function validate(categories, inputName) {
     if (inputName.length < 0) return false;
     for (const category of categories.data) {
@@ -48,7 +60,6 @@ addCategoryForm.addEventListener("submit", (e) => {
         localStorage.setItem("categories", JSON.stringify(categories));
         if (period) window.location.href = `homepage.html?period=${period}`;
         else window.location.href = `homepage.html`;
-
     } else {
         categoryNameError.textContent = "Wrong name";
 
