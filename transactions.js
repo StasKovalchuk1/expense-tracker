@@ -1,4 +1,4 @@
-import { Category, Transaction } from './app.js';
+import { Transaction } from './app.js';
 import { categories, playDeleteSound } from './app.js';
 
 class CategoryTransactionsPage {
