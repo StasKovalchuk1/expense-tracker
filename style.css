@@ -1,7 +1,7 @@
 body {
     font-family: sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 20px 50px;
 }
 
 header {
@@ -234,8 +234,9 @@ main {
 }
 
 .chart-container {
-    width: 500px;
-    margin: 25px auto 0;
+    width: 80%;
+    max-width: 400px;
+    margin: 25px auto;
 }
 
 #add-category-form {
@@ -264,5 +265,52 @@ main {
     display: block;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+#video-popup {
+    display: none;
+}
+
+video {
+    max-width: 600px;
+}
+
+.see-video-button {
+    display: block;
+}
+
+.close-popup-button{
+    display: none;
+}
+
+.see-video-button, .close-popup-button{
+    text-align: center;
+    width: 120px;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+    transition: 0.2s;
+}
+
+.see-video-button:hover{
+    background-color: #ddd;
+}
+
+.close-popup-button:hover{
+    background-color: #ddd;
+}
+
+.video-info{
+    margin-bottom: 5px;
+}
+
+@media screen and (max-width: 500px){
+    h1, h2{
+        font-size: 20px;
+    }
 }
 

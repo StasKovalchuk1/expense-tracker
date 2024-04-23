@@ -103,7 +103,7 @@ export class Category {
      */
     getTransactionsForLastQuarter() {
         const today = new Date();
-        const currentMonth = today.getMonth();
+        const currentMonth = today.getMonth() + 1;
         const currentYear = today.getFullYear();
 
         let quarter;
@@ -211,6 +211,8 @@ class Homepage {
         }
 
         if (this._categoriesListEl) this._categoriesListEl.addEventListener('click', this.handleDeleteCategory.bind(this));
+
+        this.setHandlerForVideo();
     }
 
     /**
@@ -300,14 +302,15 @@ class Homepage {
     handleCategoryClick(e) {
         e.preventDefault();
         const categorySelected = e.target.textContent;
-        window.location.href = `transactions.html?category=${categorySelected}&period=${this._periodSelect.value}`;
+        const periodSelected = this._periodSelect.value; // Assuming this is a reference to your period select element
+
+        window.location.href = `transactions.html?category=${categorySelected}&period=${periodSelected}`;
     }
 
     /**
      * Sets click handlers on categories
      */
     setHandlersToCategoryClick() {
-        console.log("cat click")
         this._categoryNameEls = document.querySelectorAll('.category-name');
         for (const categoryNameEl of this._categoryNameEls) {
             categoryNameEl.addEventListener('click', this.handleCategoryClick.bind(this));
@@ -319,34 +322,39 @@ class Homepage {
      * @param ctx - variable to store the 2D rendering context of a canvas element.
      */
     drawGraph(ctx) {
-        console.log("draw graph was called")
-         this._chart = new Chart(ctx, {
-            type: "pie",
-            data: {
-                labels: this._categories.map(category => category.name),
-                datasets: [
-                    {
-                        data: this._categories.map(category => category.getTotalForPeriod(this._periodSelect.value)),
-                        backgroundColor: this._categories.map(category => category.color),
-                        borderColor: this._categories.map(category => this.modifyString(category.color, "1)")),
-                    },
-                ],
-            },
-            options: {
-                legend: {
-                    display: true,
-                },
-                tooltips: {
-                    enabled: true,
-                    mode: "single",
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.yLabel + " kc.";
+        const hasData = this._categories.some(category => category.getTotalForPeriod(this._periodSelect.value) > 0);
+        if (hasData) {
+            this._canvas.style.display = "block";
+            this._chart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: this._categories.map(category => category.name),
+                    datasets: [
+                        {
+                            data: this._categories.map(category => category.getTotalForPeriod(this._periodSelect.value)),
+                            backgroundColor: this._categories.map(category => category.color),
+                            borderColor: this._categories.map(category => this.modifyString(category.color, "1)")),
                         },
+                    ],
+                },
+                options: {
+                    legend: {
+                        display: true,
                     },
-                }
-            },
-        });
+                    tooltips: {
+                        enabled: true,
+                        mode: "single",
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.yLabel + " kc.";
+                            },
+                        },
+                    }
+                },
+            });
+        } else {
+            this._canvas.style.display = "none";
+        }
     }
 
     /**
@@ -377,12 +385,20 @@ class Homepage {
         const confirm = window.confirm("Are you sure you want to delete this category?");
         if (!confirm) return;
 
+        this.deleteCategory(categoryDeleteName);
+    }
+
+    /**
+     * Deletes category from local storage and sets new html
+     * @param {string} categoryDeleteName - deleting category's name
+     */
+    deleteCategory(categoryDeleteName) {
         try {
             this._categories = this._categories.filter(category => category.name !== categoryDeleteName)
             playDeleteSound();
             this.createHTMLCategoriesWithStrings();
             this.setTotalAmount();
-            this._chart.destroy();
+            if (this._chart) this._chart.destroy();
             this.drawGraph(this._ctx);
             localStorage.setItem('categories', JSON.stringify({
                 data: this._categories.map(category => ({
@@ -395,6 +411,33 @@ class Homepage {
         } catch (error) {
             console.error('Error deleting transaction:', error);
         }
+    }
+
+    /**
+     * Sets handlers for 'see video button' and 'close video button'
+     */
+    setHandlerForVideo() {
+        const seeVideoButton = document.getElementById('see-video-button');
+        const videoPopup = document.getElementById('video-popup');
+        const closePopupButton = document.querySelector('.close-popup-button');
+
+        if (!videoPopup) return;
+
+        seeVideoButton.addEventListener('click', () => {
+            videoPopup.style.display = 'flex';
+            seeVideoButton.style.display = 'none';
+            closePopupButton.style.display = 'block';
+            window.scrollTo({
+                top: videoPopup.offsetTop,
+                behavior: 'smooth'
+            });
+        });
+
+        closePopupButton.addEventListener('click', () => {
+            videoPopup.style.display = 'none';
+            seeVideoButton.style.display = 'block';
+            closePopupButton.style.display = 'none';
+        });
     }
 
 }
@@ -416,6 +459,7 @@ export function playDeleteSound() {
 }
 
 const homepage = new Homepage();
+
 export let categories = homepage.myCategories;
 
 

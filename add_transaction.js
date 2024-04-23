@@ -12,14 +12,14 @@ class AddTransaction {
         this._transactionAmountError = document.getElementById("transaction-amount-error");
         this._categoryNameError = document.getElementById("category-name-error");
         this._dateError = document.getElementById("date-error");
-        this._addTransactionForm.addEventListener('submit', async (e) => {
+        this._addTransactionForm.addEventListener('submit',(e) => {
             e.preventDefault();
 
             const amountValue = document.getElementById('amount').value;
             const categoryValue = document.getElementById('category').value;
             const dateValue = document.getElementById('date').value;
 
-            await this.addTransaction(dateValue, amountValue, categoryValue);
+            this.addTransaction(dateValue, amountValue, categoryValue);
         });
 
         this._urlSearchParams = new URLSearchParams(window.location.search);
@@ -52,33 +52,19 @@ class AddTransaction {
      * @param {date} dateValue
      * @param {number} amountValue
      * @param {string} categoryValue
-     * @returns {Promise<void>}
      */
-    async addTransaction(dateValue, amountValue, categoryValue) {
-        const trans = new Transaction(dateValue, amountValue);
-
+    addTransaction(dateValue, amountValue, categoryValue) {
         const storedCategories = localStorage.getItem('categories');
         const categoriesData = JSON.parse(storedCategories);
-
         const categories = categoriesData.data.map(categoryData => new Category(categoryData.name, categoryData.transactions, categoryData.color));
 
         const selectedCategory = categories.find(category => category.getName() === categoryValue);
 
-        if (selectedCategory) {
-            if (this.validate(amountValue, dateValue)) selectedCategory.addTransaction(trans);
-            else return;
-        } else {
-            this._categoryNameError.textContent = "Need to choose category";
-            console.warn('Category not found:', categoryValue);
-        }
+        if (!this.validate(categories, amountValue, dateValue, selectedCategory)) return;
 
-        localStorage.setItem('categories', JSON.stringify({
-            data: categories.map(category => ({
-                name: category.name,
-                transactions: category.transactions,
-                color: category.color
-            })),
-        }));
+        const trans = new Transaction(dateValue, amountValue);
+        selectedCategory.addTransaction(trans)
+        this.updateLocalStorageCategories(categories);
 
         if (this._period) window.location.href = `homepage.html?period=${this._period}`;
         else window.location.href = `homepage.html`;
@@ -86,12 +72,28 @@ class AddTransaction {
     }
 
     /**
-     * Validates inputs
-     * @param {number} amount
-     * @param {date} date
+     * Update categories in local storage
+     * @param {Array<Category>} categories - list of categories
+     */
+    updateLocalStorageCategories(categories) {
+        localStorage.setItem('categories', JSON.stringify({
+            data: categories.map(category => ({
+                name: category.name,
+                transactions: category.transactions,
+                color: category.color
+            })),
+        }));
+    }
+
+    /**
+     * Validates add transaction inputs
+     * @param {Array<Category>} categories - list of categories
+     * @param {number} amount - transaction amount
+     * @param {date} date - transaction date
+     * @param {Category} selectedCategory - selected category
      * @returns {boolean}
      */
-    validate(amount, date) {
+    validate(categories, amount, date, selectedCategory) {
         if (amount < 1) {
             this._transactionAmountError.textContent = "Wrong amount";
             return false;
@@ -100,6 +102,11 @@ class AddTransaction {
             this._dateError.textContent = "Wrong date";
             return false;
         }
+        if (!selectedCategory) {
+            this._categoryNameError.textContent = "Wrong category";
+            return false;
+        }
+
         return true;
     }
 

@@ -55,21 +55,29 @@ class CategoryTransactionsPage {
                 parseFloat(transaction.amount) === amount;
         });
 
-        console.log(deletedTransaction)
-
         if (!deletedTransaction) {
             return;
         }
 
+        this.delete(deletedTransaction, transactionLi);
+    }
+
+    /**
+     * Deletes transaction from local storage and sets new html
+     * @param {string} deletedTransaction - transaction that should be deleted
+     * @param targetEl - element with delete transforming
+     */
+    delete(deletedTransaction, targetEl) {
         try {
+            const transactionLi = targetEl;
             playDeleteSound();
+
             const index = this._categoryObj.transactions.findIndex(transaction =>
                 (new Date(transaction.date).getTime() === deletedTransaction.date.getTime()) && (transaction.amount === deletedTransaction.amount)
             );
             this._categoryObj.transactions.splice(index, 1);
 
             this._filteredTransactions = this._filteredTransactions.filter(transaction => transaction !== deletedTransaction);
-            console.log(this._filteredTransactions)
 
             transactionLi.classList.add('removing');
 
@@ -93,21 +101,7 @@ class CategoryTransactionsPage {
      * Creates HTML with category transactions by asc
      */
     createHtmlWithStrings() {
-        this._transactionsListEl.innerHTML = '';
-
-        const transactionsByDate = {};
-
-        this._filteredTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-        this._filteredTransactions.forEach(transaction => {
-            if (!transactionsByDate[transaction.date]) {
-                transactionsByDate[transaction.date] = [];
-            }
-
-            transactionsByDate[transaction.date].push(transaction);
-        });
-
-        const groupedTransactions = Object.values(transactionsByDate);
+        const groupedTransactions = this.getGroupedTransactions();
 
         let transactionsHtmlArray = [];
 
@@ -132,6 +126,28 @@ class CategoryTransactionsPage {
         }
 
         this._transactionsListEl.innerHTML = transactionsHtmlArray.join('');
+    }
+
+    /**
+     * Groups transactions by date
+     * @returns {unknown[]} - transactions grouped by date
+     */
+    getGroupedTransactions() {
+        this._transactionsListEl.innerHTML = '';
+
+        const transactionsByDate = {};
+
+        this._filteredTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        this._filteredTransactions.forEach(transaction => {
+            if (!transactionsByDate[transaction.date]) {
+                transactionsByDate[transaction.date] = [];
+            }
+
+            transactionsByDate[transaction.date].push(transaction);
+        });
+
+        return Object.values(transactionsByDate);
     }
 
     /**
