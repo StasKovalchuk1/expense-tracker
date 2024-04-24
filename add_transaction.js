@@ -12,6 +12,49 @@ class AddTransaction {
         this._transactionAmountError = document.getElementById("transaction-amount-error");
         this._categoryNameError = document.getElementById("category-name-error");
         this._dateError = document.getElementById("date-error");
+        // this._addTransactionForm.addEventListener('submit',(e) => {
+        //     e.preventDefault();
+        //
+        //     const amountValue = document.getElementById('amount').value;
+        //     const categoryValue = document.getElementById('category').value;
+        //     const dateValue = document.getElementById('date').value;
+        //
+        //     this.addTransaction(dateValue, amountValue, categoryValue);
+        // });
+        this.setHandlerOnFormSubmitting();
+
+        this._urlSearchParams = new URLSearchParams(window.location.search);
+        this._categoryName = this._urlSearchParams.get('category');
+        this._period = this._urlSearchParams.get('period');
+
+        this._categorySelectEl = document.getElementById('category');
+
+        // for (const category of categories) {
+        //     const optionElement = document.createElement('option');
+        //     optionElement.value = category.name;
+        //     optionElement.textContent = category.name;
+        //     this._categorySelectEl.appendChild(optionElement);
+        // }
+        this.addOptionElementToForm();
+        // if (this._categoryName) {
+        //     const option = this._categorySelectEl.querySelector(`option[value="${this._categoryName}"]`);
+        //     if (option) option.selected = true;
+        // }
+        this.setOptionValue();
+
+        // document.getElementById('back-button').addEventListener('click',
+        //     () => {
+        //         if (this._period) window.location.href = `homepage.html?period=${this._period}`;
+        //         else window.location.href = `homepage.html`;
+        // });
+        this.setHandlerOnBackButton();
+
+    }
+
+    /**
+     * Sets handler on form submitting
+     */
+    setHandlerOnFormSubmitting() {
         this._addTransactionForm.addEventListener('submit',(e) => {
             e.preventDefault();
 
@@ -21,30 +64,36 @@ class AddTransaction {
 
             this.addTransaction(dateValue, amountValue, categoryValue);
         });
+    }
 
-        this._urlSearchParams = new URLSearchParams(window.location.search);
-        this._categoryName = this._urlSearchParams.get('category');
-        this._period = this._urlSearchParams.get('period');
-
-        this._categorySelectEl = document.getElementById('category');
-
+    /**
+     * Adds option element with categories to form
+     */
+    addOptionElementToForm() {
         for (const category of categories) {
             const optionElement = document.createElement('option');
             optionElement.value = category.name;
             optionElement.textContent = category.name;
             this._categorySelectEl.appendChild(optionElement);
         }
+    }
+
+    /**
+     * Sets option value from url or by default
+     */
+    setOptionValue(){
         if (this._categoryName) {
             const option = this._categorySelectEl.querySelector(`option[value="${this._categoryName}"]`);
             if (option) option.selected = true;
         }
+    }
 
+    setHandlerOnBackButton() {
         document.getElementById('back-button').addEventListener('click',
             () => {
                 if (this._period) window.location.href = `homepage.html?period=${this._period}`;
                 else window.location.href = `homepage.html`;
-        });
-
+            });
     }
 
     /**

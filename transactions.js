@@ -12,10 +12,9 @@ class CategoryTransactionsPage {
         this._expensesEl = document.querySelector('.category-expenses-h2');
         this._urlSearchParams = new URLSearchParams(window.location.search);
         this._categoryName = this._urlSearchParams.get('category');
-
         this._period = this._urlSearchParams.get('period');
-
         this._categoryObj = categories.find(category => category.name === this._categoryName)
+
         if (this._period && this._categoryObj) {
             this._filteredTransactions = this._categoryObj.getTransactionsForPeriod(this._period)
                 .map(transactionData => new Transaction(new Date(transactionData.date), transactionData.amount));
@@ -24,14 +23,21 @@ class CategoryTransactionsPage {
 
         this.setHeader();
         this.createHtmlWithStrings();
+        this.setHandlerOnButtons();
 
+        // should be added after html created
+        this._transactionsListEl.addEventListener('click', this.handleDeleteTransaction.bind(this));
+    }
+
+    /**
+     * Sets event listeners on 'add transaction' and 'home' buttons
+     */
+    setHandlerOnButtons() {
         document.getElementById('add-transaction-button').addEventListener('click',
-            (e) => window.location.href = `addTransaction.html?category=${this._categoryName}&period=${this._period}`);
+            () => window.location.href = `addTransaction.html?category=${this._categoryName}&period=${this._period}`);
 
         document.getElementById('back-button').addEventListener('click',
             () => window.location.href = `homepage.html?period=${this._period}`)
-
-        this._transactionsListEl.addEventListener('click', this.handleDeleteTransaction.bind(this));
     }
 
     /**

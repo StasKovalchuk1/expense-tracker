@@ -114,7 +114,7 @@ export class Category {
 
         return this.transactions.filter(transaction => {
             const transactionDate = new Date(transaction.date);
-            return rightMonths.includes(transactionDate.getMonth())  && transactionDate.getFullYear() === currentYear;
+            return rightMonths.includes(transactionDate.getMonth() + 1)  && transactionDate.getFullYear() === currentYear;
         })
     }
 
@@ -184,19 +184,7 @@ class Homepage {
             this.createHTMLCategoriesWithStrings();
         }
 
-        this._addTransactionButton = document.querySelector('#add-transaction-button-homepage');
-        if (this._addTransactionButton) {
-            this._addTransactionButton.addEventListener('click', (e) => {
-                window.location.href = `addTransaction.html?period=${this._periodSelect.value}`;
-            })
-        }
-
-        this._newCategoryButton = document.querySelector('#new-category-button-homepage');
-        if (this._newCategoryButton) {
-            this._newCategoryButton.addEventListener('click', (e) => {
-                window.location.href = `newCategory.html?period=${this._periodSelect.value}`;
-            })
-        }
+        this.setHandlerOnButtons();
 
         this._categoryNameEls = document.querySelectorAll('.category-name');
         this.setHandlersToCategoryClick();
@@ -221,6 +209,25 @@ class Homepage {
      */
     get myCategories() {
         return this._categories;
+    }
+
+    /**
+     * Sets event listeners on 'add transaction' and 'new category' buttons
+     */
+    setHandlerOnButtons() {
+        this._addTransactionButton = document.querySelector('#add-transaction-button-homepage');
+        if (this._addTransactionButton) {
+            this._addTransactionButton.addEventListener('click', (e) => {
+                window.location.href = `addTransaction.html?period=${this._periodSelect.value}`;
+            })
+        }
+
+        this._newCategoryButton = document.querySelector('#new-category-button-homepage');
+        if (this._newCategoryButton) {
+            this._newCategoryButton.addEventListener('click', (e) => {
+                window.location.href = `newCategory.html?period=${this._periodSelect.value}`;
+            })
+        }
     }
 
     /**
@@ -272,6 +279,7 @@ class Homepage {
      * Sets total amount for selected period
      */
     setTotalAmount() {
+        console.log(this._periodSelect.value)
         let total = this._categories.reduce((sum, category) => {
             return sum + category.getTotalForPeriod(this._periodSelect.value);
         }, 0);
@@ -291,7 +299,7 @@ class Homepage {
             categoryNameEl.removeEventListener('click', this.handleCategoryClick.bind(this));
             categoryNameEl.addEventListener('click', this.handleCategoryClick.bind(this));
         }
-        this._chart.destroy();
+        if (this._chart) this._chart.destroy();
         this.drawGraph(this._ctx);
     }
 
