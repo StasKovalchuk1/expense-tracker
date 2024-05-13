@@ -37,7 +37,7 @@ class CategoryTransactionsPage {
             () => window.location.href = `addTransaction.html?category=${this._categoryName}&period=${this._period}`);
 
         document.getElementById('back-button').addEventListener('click',
-            () => window.location.href = `homepage.html?period=${this._period}`)
+            () => window.location.href = `index.html?period=${this._period}`)
     }
 
     /**

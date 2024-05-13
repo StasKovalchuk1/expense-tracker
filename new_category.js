@@ -5,8 +5,8 @@ const period = urlSearchParams.get('period');
 
 document.getElementById('back-button').addEventListener('click',
     () => {
-        if (period) window.location.href = `homepage.html?period=${period}`;
-        else window.location.href = `homepage.html`;
+        if (period) window.location.href = `index.html?period=${period}`;
+        else window.location.href = `index.html`;
     });
 
 
@@ -58,8 +58,8 @@ addCategoryForm.addEventListener("submit", (e) => {
 
         categories.data.push(newCategory);
         localStorage.setItem("categories", JSON.stringify(categories));
-        if (period) window.location.href = `homepage.html?period=${period}`;
-        else window.location.href = `homepage.html`;
+        if (period) window.location.href = `index.html?period=${period}`;
+        else window.location.href = `index.html`;
     } else {
         categoryNameError.textContent = "Wrong name";
 

@@ -44,8 +44,8 @@ class AddTransaction {
 
         // document.getElementById('back-button').addEventListener('click',
         //     () => {
-        //         if (this._period) window.location.href = `homepage.html?period=${this._period}`;
-        //         else window.location.href = `homepage.html`;
+        //         if (this._period) window.location.href = `index.html?period=${this._period}`;
+        //         else window.location.href = `index.html`;
         // });
         this.setHandlerOnBackButton();
 
@@ -91,8 +91,8 @@ class AddTransaction {
     setHandlerOnBackButton() {
         document.getElementById('back-button').addEventListener('click',
             () => {
-                if (this._period) window.location.href = `homepage.html?period=${this._period}`;
-                else window.location.href = `homepage.html`;
+                if (this._period) window.location.href = `index.html?period=${this._period}`;
+                else window.location.href = `index.html`;
             });
     }
 
@@ -115,8 +115,8 @@ class AddTransaction {
         selectedCategory.addTransaction(trans)
         this.updateLocalStorageCategories(categories);
 
-        if (this._period) window.location.href = `homepage.html?period=${this._period}`;
-        else window.location.href = `homepage.html`;
+        if (this._period) window.location.href = `index.html?period=${this._period}`;
+        else window.location.href = `index.html`;
 
     }
 
